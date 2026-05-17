@@ -3,6 +3,7 @@ const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const connectDB = require("./config/db");
+require("dotenv").config();
 
 connectDB();
 const app = express();
@@ -13,12 +14,11 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/services", require("./routes/serviceRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
-
+app.use("/api/razorpay", require("./routes/razorpayRoutes"));
 
 const server = http.createServer(app);
 const io = new Server(server,{cors:{origin:"*"}});
 require("./socket/socketHandler")(io);
 require("./utils/socketEmitters").setIO(io);
 
-
-server.listen(5000, ()=>console.log("Backend running"));
+server.listen(5000, ()=>console.log("Backend running on port 5000"));
